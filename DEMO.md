@@ -1,6 +1,10 @@
 # Demo thread + submission copy
 
-Live app: https://khadiscon.github.io/the-oven/
+Live app: https://cdn.jsdelivr.net/gh/khadiscon/the-oven@main/index.html
+
+Mirror: https://raw.githack.com/khadiscon/the-oven/main/index.html
+
+GitHub Pages (after enabling branch deploy): https://khadiscon.github.io/the-oven/
 
 GitHub: https://github.com/khadiscon/the-oven
 
@@ -12,7 +16,7 @@ A cApp kitchen: connect Nightly, bake an on-chain crumb into the community Cooki
 
 Let him cook.
 
-https://khadiscon.github.io/the-oven/
+https://cdn.jsdelivr.net/gh/khadiscon/the-oven@main/index.html
 
 2/ Wallet: Nightly is required.
 
@@ -62,7 +66,7 @@ Cookbook: https://docs.cookiechain.wtf/getting-started
 8/ Open source, static, no backend keys.
 
 Repo: https://github.com/khadiscon/the-oven
-App: https://khadiscon.github.io/the-oven/
+App: https://cdn.jsdelivr.net/gh/khadiscon/the-oven@main/index.html
 Docs: https://docs.cookiechain.wtf
 Explorer: https://cookiescan.io
 
@@ -72,7 +76,7 @@ Build something useful. Build something fun. Build something degenerate.
 
 Oven’s open on Cookie Chain — Nightly in, crumb into the Cookie Jar, Cookiebox swaps, bCOOK staking, DAS scan, cookie-mcp chef.
 
-Live: https://khadiscon.github.io/the-oven/
+Live: https://cdn.jsdelivr.net/gh/khadiscon/the-oven@main/index.html
 Thread: (paste X URL)
 Repo: https://github.com/khadiscon/the-oven
 Bridge: https://hyperlane.cookiescan.io
@@ -80,5 +84,5 @@ Bridge: https://hyperlane.cookiescan.io
 ## Superteam Earn submission fields
 
 - GitHub repository: https://github.com/khadiscon/the-oven
-- Live application URL: https://khadiscon.github.io/the-oven/
+- Live application URL: https://cdn.jsdelivr.net/gh/khadiscon/the-oven@main/index.html
 - Relevant addresses: Cookie Jar `568tU9FMksJDxjkLBjWisSA4J4C5uPH87NCCkyREwrxe`; bCOOK `EkPafx58mgwkEnGwo62jXhXDAdJ37Z8G8MFBRPsr9uhz`; stake pool `GxbNKNYdtNXQkhDkpHdLDAMX64GxaECgANqdfp6cUGH4`; Cookiebox DAMM `DAMMjDCEFTDkt7ywazZS8GoaLtjb3HaJo3pLbf64xrPY`; Cookieswap BAMM `WTzkPUoprVx7PDc1tfKA5sS7k1ynCgU89WtwZhksHX5`; Memo `MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr`; genesis `9wDaBRDgArEUpvhHxGguNkwozsZh4UpGZB9o2EoEcBB2`

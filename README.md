@@ -6,7 +6,11 @@ The Oven is a public Cookie Chain cApp (Cookie App) for the [Create an App on Co
 
 It is a kitchen, not a dashboard clone: you connect **Nightly**, switch onto Cookie Chain, and do real SVM work — on-chain memos into the community Cookie Jar, Cookiebox aggregator swaps, bCOOK liquid staking, DAS scans, and a browser-side **cookie-mcp chef** that answers with live chain data.
 
-**Live app:** [https://khadiscon.github.io/the-oven/](https://khadiscon.github.io/the-oven/)
+**Live app:** [https://cdn.jsdelivr.net/gh/khadiscon/the-oven@main/index.html](https://cdn.jsdelivr.net/gh/khadiscon/the-oven@main/index.html)
+
+Mirror: [https://raw.githack.com/khadiscon/the-oven/main/index.html](https://raw.githack.com/khadiscon/the-oven/main/index.html)
+
+GitHub Pages (`https://khadiscon.github.io/the-oven/`): open [Settings → Pages](https://github.com/khadiscon/the-oven/settings/pages), set **Deploy from a branch** to `main` / `/ (root)`, save.
 
 **Repo:** [https://github.com/khadiscon/the-oven](https://github.com/khadiscon/the-oven)
 
@@ -75,8 +79,6 @@ npx serve .
 
 Open the URL in a Chromium browser with [Nightly](https://nightly.app/) installed.
 
-GitHub Pages serves the same files from `main`.
-
 ### First-time user path
 
 1. Install Nightly.
@@ -105,7 +107,7 @@ See [DEMO.md](./DEMO.md) for an X-thread draft and Telegram blurb.
 - Vanilla JS ES modules (no bundler)
 - `@solana/web3.js` + `@solana/spl-token` from esm.sh
 - Cookie Chain RPC / DAS / Cookiescan / Cookiebox over CORS
-- GitHub Pages
+- GitHub Pages / jsDelivr
 
 ## License
 
