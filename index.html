@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Oven — Cookie Chain cApp</title>
+  <meta name="description" content="Bake crumbs, swap on Cookiebox, stake bCOOK, and talk to a cookie-mcp chef on Cookie Chain. Nightly wallet required." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50' font-size='52'%3E🍪%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,650;1,9..144,650&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./css/oven.css" />
+</head>
+<body>
+  <div class="glow"></div>
+  <header class="top">
+    <div class="wrap top-inner">
+      <a class="brand" href="#">
+        <div class="logo">🍪</div>
+        <div>
+          <h1>The Oven</h1>
+          <p>Cookie Chain kitchen</p>
+        </div>
+      </a>
+      <div class="live">
+        <span id="health-dot" class="dot"></span>
+        <span id="health-label">warming up…</span>
+        <span class="mono" id="slot-label"></span>
+      </div>
+      <div class="wallet-box">
+        <button class="btn ghost tiny" id="switch-network">Switch to Cookie Chain</button>
+        <button class="btn primary" id="connect-btn">Connect Nightly</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="kicker">cApp · SVM · Nightly · Cookiebox · cookie-mcp</div>
+      <h2>Let him <em>cook</em> on Cookie Chain.</h2>
+      <p class="lede">
+        The Oven is a kitchen for Cookie Chain: drop an on-chain crumb into the community Cookie Jar,
+        mix a Cookiebox swap, bake COOK into liquid-staked bCOOK, scan DAS assets, and ask the chef
+        live questions against Cookiescan + RPC. Sub-second finality. Fees in crumbs.
+      </p>
+    </section>
+
+    <section class="stats" id="stats">
+      <div class="stat"><span>Status</span><b id="stat-status">—</b></div>
+      <div class="stat"><span>Slot</span><b id="stat-slot">—</b></div>
+      <div class="stat"><span>Epoch</span><b id="stat-epoch">—</b></div>
+      <div class="stat"><span>COOK / USD</span><b id="stat-price">—</b></div>
+      <div class="stat"><span>Wallet COOK</span><b id="stat-bal">—</b></div>
+      <div class="stat"><span>RPC</span><b id="stat-rpc">—</b></div>
+    </section>
+
+    <nav class="tabs" id="tabs">
+      <button class="tab active" data-tab="kitchen">Kitchen</button>
+      <button class="tab" data-tab="bake">Bake</button>
+      <button class="tab" data-tab="mix">Mix</button>
+      <button class="tab" data-tab="stake">Stake</button>
+      <button class="tab" data-tab="scan">Scan</button>
+      <button class="tab" data-tab="chef">Chef</button>
+      <button class="tab" data-tab="bridge">Bridge</button>
+    </nav>
+
+    <section class="grid" id="panel-kitchen">
+      <article class="panel">
+        <h3>The kitchen is live.</h3>
+        <p class="sub">Nightly is the required wallet. The app points at Cookie Chain RPC, switches Nightly onto the Cookie genesis hash, then lets you sign real SVM transactions.</p>
+        <div class="list" id="wallet-card">
+          <div class="token"><b>Not connected</b><p class="mono">Install Nightly, then connect. We will ask it to use Cookie Chain (`rpc.cookiescan.io`).</p></div>
+        </div>
+        <div class="actions">
+          <a class="btn" href="https://nightly.app/" target="_blank" rel="noreferrer">Get Nightly</a>
+          <a class="btn" href="https://hyperlane.cookiescan.io" target="_blank" rel="noreferrer">Bridge COOK</a>
+          <a class="btn" href="https://cookiescan.io" target="_blank" rel="noreferrer">Cookiescan</a>
+        </div>
+      </article>
+      <article class="panel">
+        <h3>Recent heat</h3>
+        <p class="sub">Your last Oven transactions on this browser.</p>
+        <div class="list" id="tx-log"><div class="tx mono">Nothing baked yet.</div></div>
+      </article>
+    </section>
+
+    <section class="grid hidden" id="panel-bake">
+      <article class="panel">
+        <h3>Drop a crumb.</h3>
+        <p class="sub">Writes an on-chain memo and sends COOK to the community Cookie Jar (Vault 1). Public goods, permanently on Cookie Chain.</p>
+        <label for="crumb-msg">Memo (max 180 chars)</label>
+        <textarea id="crumb-msg" maxlength="180" placeholder="gm from the oven. let him cook."></textarea>
+        <label for="crumb-amt">Optional COOK donation</label>
+        <input id="crumb-amt" type="number" min="0" step="0.000001" value="0.001" />
+        <p class="mono">Jar: 568tU9FMksJDxjkLBjWisSA4J4C5uPH87NCCkyREwrxe</p>
+        <div class="actions">
+          <button class="btn primary" id="bake-btn">Bake crumb</button>
+        </div>
+      </article>
+      <article class="panel">
+        <h3>Cookie Jar wall</h3>
+        <p class="sub">Latest Oven memos landing in the community vault.</p>
+        <div class="list" id="crumb-list"><div class="crumb mono">loading crumbs…</div></div>
+      </article>
+    </section>
+
+    <section class="grid hidden" id="panel-mix">
+      <article class="panel">
+        <h3>Mix a swap.</h3>
+        <p class="sub">Quotes and unsigned swap txs come from the Cookiebox aggregator, routing Cookiebox DAMM/CLMM and Cookieswap BAMM. You sign locally with Nightly.</p>
+        <div class="row">
+          <div>
+            <label>From</label>
+            <select id="mix-from"></select>
+          </div>
+          <div>
+            <label>To</label>
+            <select id="mix-to"></select>
+          </div>
+        </div>
+        <label>Amount</label>
+        <input id="mix-amt" type="number" min="0" step="any" value="1" />
+        <label>Slippage (bps)</label>
+        <input id="mix-slip" type="number" min="1" value="500" />
+        <div class="actions">
+          <button class="btn" id="quote-btn">Get quote</button>
+          <button class="btn primary" id="swap-btn">Swap</button>
+        </div>
+        <div id="quote-box" class="token" style="margin-top:16px">Quote appears here.</div>
+      </article>
+      <article class="panel">
+        <h3>Venues</h3>
+        <p class="sub">Top Cookie Chain pools from Cookiescan markets.</p>
+        <div class="list" id="pool-list"><div class="pool mono">loading pools…</div></div>
+      </article>
+    </section>
+
+    <section class="grid hidden" id="panel-stake">
+      <article class="panel">
+        <h3>Bake COOK into bCOOK.</h3>
+        <p class="sub">Liquid staking against the canonical Cookie Chain stake pool. DepositSol mints bCOOK; WithdrawSol redeems COOK from the reserve. Fees: 0.5% in / 2% out.</p>
+        <div id="stake-info" class="token mono">loading pool…</div>
+        <label>Amount</label>
+        <input id="stake-amt" type="number" min="0" step="any" value="1" />
+        <div class="actions">
+          <button class="btn primary" id="stake-btn">Stake COOK → bCOOK</button>
+          <button class="btn" id="unstake-btn">Unstake bCOOK → COOK</button>
+        </div>
+      </article>
+      <article class="panel">
+        <h3>Why stake here</h3>
+        <p class="sub">Same program Bake Your Stake uses. You stay liquid, the pool is multi-validator, and The Oven builds the instruction locally — no custody.</p>
+        <div class="list">
+          <div class="token"><b>bCOOK mint</b><p class="mono addr">EkPafx58mgwkEnGwo62jXhXDAdJ37Z8G8MFBRPsr9uhz</p></div>
+          <div class="token"><b>Stake pool</b><p class="mono addr">GxbNKNYdtNXQkhDkpHdLDAMX64GxaECgANqdfp6cUGH4</p></div>
+          <a class="btn" href="https://bakeyourstake.xyz" target="_blank" rel="noreferrer">bakeyourstake.xyz</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="grid hidden" id="panel-scan">
+      <article class="panel">
+        <h3>Scan the pantry.</h3>
+        <p class="sub">Cookiescan token registry + Cookie DAS (`api.cookiescan.io`). Search a ticker, mint, or load the connected wallet's assets.</p>
+        <div class="row">
+          <div>
+            <label>Search tokens</label>
+            <input id="scan-q" placeholder="COOKHOUSE, bCOOK, mint…" />
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="scan-btn">Search</button>
+          <button class="btn" id="das-btn">Load my DAS assets</button>
+        </div>
+        <div id="scan-out" class="list" style="margin-top:16px"></div>
+      </article>
+      <article class="panel">
+        <h3>Holdings</h3>
+        <p class="sub">Parsed token accounts on Cookie Chain for the connected wallet.</p>
+        <div class="list" id="holdings"><div class="token mono">connect a wallet</div></div>
+      </article>
+    </section>
+
+    <section class="grid hidden" id="panel-chef">
+      <article class="panel">
+        <h3>Ask the chef.</h3>
+        <p class="sub">Browser-side cookie-mcp: the chef runs live Cookie Chain tools (health, quote, search, pools, stake, balance, DAS) and answers with real numbers — not vibes.</p>
+        <div class="chat" id="chat"></div>
+        <div class="row" style="margin-top:12px">
+          <input id="chef-q" placeholder="Quote 1 COOK to bCOOK. What's chain health?" />
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="chef-btn">Cook</button>
+          <button class="btn tiny" data-prompt="What's the health of Cookie Chain right now?">Health</button>
+          <button class="btn tiny" data-prompt="Quote swapping 1 COOK for bCOOK">Quote</button>
+          <button class="btn tiny" data-prompt="Find COOKHOUSE and show liquidity">COOKHOUSE</button>
+          <button class="btn tiny" data-prompt="Show top Cookie Chain pools">Pools</button>
+        </div>
+      </article>
+      <article class="panel">
+        <h3>Tools the chef can use</h3>
+        <div class="list">
+          <div class="token"><b>chain_health</b><p class="sub">RPC batch: slot, epoch, validators, lag</p></div>
+          <div class="token"><b>get_quote / trade</b><p class="sub">Cookiebox aggregator + Nightly sign</p></div>
+          <div class="token"><b>search_tokens / get_pools</b><p class="sub">Cookiescan registry + markets</p></div>
+          <div class="token"><b>stake_info / get_balance / DAS</b><p class="sub">bCOOK pool, wallet, NFTs</p></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="grid hidden" id="panel-bridge">
+      <article class="panel">
+        <h3>Get COOK onto Cookie Chain.</h3>
+        <p class="sub">Native COOK on Cookie Chain is the SVM native mint. Bridged COOK on Solana is a Token-2022 mint. The Hyperlane warp route moves them 1:1 under a community multi-sig.</p>
+        <ol class="lede">
+          <li>Install <a href="https://nightly.app/" target="_blank" rel="noreferrer">Nightly</a> and create/import a Solana wallet.</li>
+          <li>Buy COOK on Solana (`36ZrtQoab5MhhySaP1YSTwUahSk6GRVUTtZ6cuVfm9e1`).</li>
+          <li>Open the <a href="https://hyperlane.cookiescan.io" target="_blank" rel="noreferrer">Cookie Chain Bridge</a> and send Solana → Cookie.</li>
+          <li>In Nightly, switch RPC to <span class="mono">https://rpc.cookiescan.io</span> (The Oven does this for you on connect).</li>
+          <li>Come back here and bake.</li>
+        </ol>
+        <div class="actions">
+          <a class="btn primary" href="https://hyperlane.cookiescan.io" target="_blank" rel="noreferrer">Open Hyperlane bridge</a>
+          <a class="btn" href="https://bridge.cookiescan.io" target="_blank" rel="noreferrer">Legacy bridge</a>
+          <a class="btn" href="https://docs.cookiechain.wtf/getting-started" target="_blank" rel="noreferrer">Docs</a>
+        </div>
+      </article>
+      <article class="panel">
+        <h3>Addresses judges care about</h3>
+        <div class="list mono" style="font-size:12px">
+          <div class="token">RPC https://rpc.cookiescan.io</div>
+          <div class="token">Genesis 9wDaBRDgArEUpvhHxGguNkwozsZh4UpGZB9o2EoEcBB2</div>
+          <div class="token">Cookie Jar 568tU9FMksJDxjkLBjWisSA4J4C5uPH87NCCkyREwrxe</div>
+          <div class="token">Cookiebox DAMM DAMMjDCEFTDkt7ywazZS8GoaLtjb3HaJo3pLbf64xrPY</div>
+          <div class="token">Cookieswap BAMM WTzkPUoprVx7PDc1tfKA5sS7k1ynCgU89WtwZhksHX5</div>
+          <div class="token">Memo MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr</div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer wrap">
+    <div>The Oven · open source cApp on Cookie Chain · not financial advice</div>
+    <div>
+      <a href="https://github.com/khadiscon/the-oven">GitHub</a> ·
+      <a href="https://www.cookiechain.wtf">Cookie Chain</a> ·
+      <a href="https://t.me/TheCookieNetChain">Telegram</a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <script type="module" src="./js/oven.js"></script>
+</body>
+</html>
